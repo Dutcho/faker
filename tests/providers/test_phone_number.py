@@ -364,3 +364,61 @@ class TestFrFr:
         for _ in range(num_samples):
             phone_number = faker.phone_number()
             assert any([re.match(pattern, phone_number) for pattern in patterns])
+
+
+class TestNlNl:
+    def test_phone_number(self, faker, num_samples):
+        # see https://en.wikipedia.org/wiki/Telephone_numbers_in_the_Netherlands#Geographical_telephone_numbers
+        pattern_head = (r"""(?: 0              # leading zero, "0" (without country calling code)
+                                |              # or 
+                                (?:\+31 \s     # country calling code, "+31 "
+                                   (?:\(0\))?  # optionally followed by bracketed zero, "(0)"
+                                )  
+                            )""")
+        pattern_large_city: Pattern = re.compile(pattern_head + r"\d{2} \s \d{7}", flags=re.VERBOSE)
+        pattern_small_area: Pattern = re.compile(pattern_head + r"\d{3} \s \d{6}", flags=re.VERBOSE)
+        pattern_mobile_number: Pattern = re.compile(pattern_head + r"6 \d{8}", flags=re.VERBOSE)
+        pattern_no_white_space: Pattern = re.compile(r"0 \d{9}", flags=re.VERBOSE)
+
+        patterns = [
+            pattern_large_city,
+            pattern_small_area,
+            pattern_mobile_number,
+            pattern_no_white_space,
+        ]
+        for _ in range(num_samples):
+            phone_number = faker.phone_number()
+            assert any([re.fullmatch(pattern, phone_number) for pattern in patterns]), (
+                f"NL phone number provider fails for {phone_number=} and {faker.locales=}")
+
+
+class TestFrBe:
+    def test_phone_number(self, faker, num_samples):
+        # see https://en.wikipedia.org/wiki/Telephone_numbers_in_Belgium#Overview_and_structure
+        pattern_head = (r"""(?: 0              # leading zero, "0" (without country calling code)
+                                |              # or 
+                                (?:\+32 \s     # country calling code, "+32 "
+                                   (?:\(0\))?  # optionally followed by bracketed zero, "(0)"
+                                )  
+                            )""")
+        pattern_big_city: Pattern = re.compile(pattern_head + r"\d \s \d{3} \s \d{2} \s \d{2}", flags=re.VERBOSE)
+        pattern_small_city: Pattern = re.compile(pattern_head + r"\d{2} (?:\s \d{2}){3}", flags=re.VERBOSE)
+        pattern_mobile_number: Pattern = re.compile(pattern_head + r"4 \d{2} (?:\s \d{2}){3}", flags=re.VERBOSE)
+        pattern_no_white_space: Pattern = re.compile(r"0 4? \d{9}", flags=re.VERBOSE)
+
+        patterns = [
+            pattern_big_city,
+            pattern_small_city,
+            pattern_mobile_number,
+            pattern_no_white_space,
+        ]
+        for _ in range(num_samples):
+            phone_number = faker.phone_number()
+            assert (phone_number and faker.locales and
+                    any([re.fullmatch(pattern, phone_number) for pattern in patterns])
+                    )
+
+
+# Phone number depends on country 'BE', not language 'fr'/'nl'; so inherit from `TestNlBE` to prevent duplication (DRY)
+class TestNlBe(TestFrBe):
+    pass

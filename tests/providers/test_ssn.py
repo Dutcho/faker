@@ -965,6 +965,13 @@ class TestNlBE(unittest.TestCase):
             assert gen_chksum_as_int in results
 
 
+# SSN depends on country 'BE', not language 'fr'/'nl'; so inherit from `TestNlBE` to prevent duplication (DRY)
+class TestFrBE(TestNlBE):
+    def setUp(self):
+        self.fake = Faker("fr_BE")
+        Faker.seed(0)
+
+
 class TestNlNL(unittest.TestCase):
     def setUp(self):
         self.fake = Faker("nl_NL")

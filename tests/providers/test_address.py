@@ -26,6 +26,7 @@ from faker.providers.address.es_ES import Provider as EsEsAddressProvider
 from faker.providers.address.es_MX import Provider as EsMxAddressProvider
 from faker.providers.address.fa_IR import Provider as FaIrAddressProvider
 from faker.providers.address.fi_FI import Provider as FiFiAddressProvider
+# from faker.providers.address.fr_BE import Provider as FrBeAddressProvider
 from faker.providers.address.fr_CH import Provider as FrChAddressProvider
 from faker.providers.address.fr_FR import Provider as FrFrAddressProvider
 from faker.providers.address.he_IL import Provider as HeIlAddressProvider
@@ -39,6 +40,8 @@ from faker.providers.address.ja_JP import Provider as JaJpAddressProvider
 from faker.providers.address.ka_GE import Provider as KaGeAddressProvider
 from faker.providers.address.ko_KR import Provider as KoKrAddressProvider
 from faker.providers.address.ne_NP import Provider as NeNpAddressProvider
+from faker.providers.address.nl_BE import Provider as NlBeAddressProvider
+from faker.providers.address.nl_NL import Provider as NlNlAddressProvider
 from faker.providers.address.no_NO import Provider as NoNoAddressProvider
 from faker.providers.address.pt_BR import Provider as PtBrAddressProvider
 from faker.providers.address.pt_PT import Provider as PtPtAddressProvider
@@ -800,6 +803,30 @@ class TestFaIr:
             state = faker.state()
             assert isinstance(state, str)
             assert state in FaIrAddressProvider.states
+
+
+class TestFrBe:
+    def test_street_prefix(self, faker, num_samples):
+        for _ in range(num_samples):
+            street_suffix = faker.street_suffix()
+            assert isinstance(street_suffix, str)
+            assert street_suffix in FrBeAddressProvider.street_suffixes
+
+
+class TestNlBe:
+    def test_street_prefix(self, faker, num_samples):
+        for _ in range(num_samples):
+            street_suffix = faker.street_suffix()
+            assert isinstance(street_suffix, str)
+            assert street_suffix in NlBeAddressProvider.street_suffixes
+
+
+class TestNlNl:
+    def test_street_prefix(self, faker, num_samples):
+        for _ in range(num_samples):
+            street_suffix = faker.street_suffix()
+            assert isinstance(street_suffix, str)
+            assert street_suffix in NlNlAddressProvider.street_suffixes
 
 
 class TestFrFr:
